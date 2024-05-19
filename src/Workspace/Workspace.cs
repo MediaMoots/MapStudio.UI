@@ -613,6 +613,36 @@ namespace MapStudio.UI
                 SaveFileData(file, filePath);
         }
 
+        public void SaveFileData(bool saveAll)
+        {
+            //Apply editor data
+            SaveEditorData(false);
+
+            foreach (var node in Outliner.Nodes)
+            {
+                var file = node.Tag as IFileFormat;
+                if (file.FileInfo.ParentArchive != null)
+                    file = file.FileInfo.ParentArchive as IFileFormat;
+
+                string filePath = file.FileInfo.FilePath;
+
+                //Save from project folder to working dir
+                if (!string.IsNullOrEmpty(Resources.ProjectFolder))
+                {
+                    string dir = Resources.ProjectFile.WorkingDirectory;
+                    filePath = Path.Combine(dir, Path.GetFileName(filePath));
+                    SaveFileData(file, filePath);
+                    return;
+                }
+
+                //Path doesn't exist so use a file dialog
+                if (!File.Exists(filePath))
+                    SaveFileWithDialog(file);
+                else
+                    SaveFileData(file, filePath);
+            }
+        }
+
         public void SaveFileWithDialog()
         {
             //Save active file format 
