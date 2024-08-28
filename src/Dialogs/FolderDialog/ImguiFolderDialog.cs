@@ -20,7 +20,7 @@ namespace MapStudio.UI
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                FolderBrowserEx.FolderBrowserDialog dialog = new FolderBrowserEx.FolderBrowserDialog() { Title = Title, InitialFolder = SelectedPath };
+                FolderBrowserEx.FolderBrowserDialog dialog = new FolderBrowserEx.FolderBrowserDialog() { Title = Title, InitialFolder = GlobalSettings.Current.CachedFolderSelectPath };
                 dialog.ShowDialog();
                 ofd = dialog.SelectedFolder;
             }
@@ -29,9 +29,14 @@ namespace MapStudio.UI
                 ofd = TinyFileDialog.SelectFolderDialog(Title, SelectedPath);
             }
 
+
             if (!string.IsNullOrEmpty(ofd))
             {
-                this.SelectedPath = ofd;
+                SelectedPath = ofd;
+
+                // Cache Path for next pick
+                GlobalSettings.Current.CachedFolderSelectPath = ofd;
+                GlobalSettings.Current.Save();
                 return true;
             }
 

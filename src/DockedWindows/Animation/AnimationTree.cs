@@ -417,7 +417,7 @@ namespace MapStudio.UI
                 float value = Track.GetFrameValue(Anim.Frame);
                 //Span the whole column
                 ImGui.PushItemWidth(ImGui.GetColumnWidth() - 3);
-                bool edited = ImGui.DragFloat($"##{Track.Name}_frame", ref value);
+                bool edited = ImGui.DragFloat($"##{Track.Name}_frame", ref value, 1, 0 ,0, "%.6f");
                 bool isActive = ImGui.IsItemDeactivated();
 
                 ImGui.PopItemWidth();
