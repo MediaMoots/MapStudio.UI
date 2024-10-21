@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Drawing;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using GLFrameworkEngine;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
 
 namespace MapStudio.UI
 {
@@ -95,7 +96,7 @@ namespace MapStudio.UI
             if (_context.Camera.Mode == Camera.CameraMode.Inspect)
             {
                 _context.Camera.TargetPosition = new OpenTK.Vector3(0, 0, 0);
-                _context.Camera.Distance = 50;
+                _context.Camera.TargetDistance = 50;
             }
             else
                 _context.Camera.TargetPosition = new OpenTK.Vector3(0, 0, 50);
@@ -162,7 +163,7 @@ namespace MapStudio.UI
             });
         }
 
-        public Bitmap SaveAsScreenshot(Framebuffer outputBuffer, int width, int height, bool useAlpha = false)
+        public Image<Rgba32> SaveAsScreenshot(Framebuffer outputBuffer, int width, int height, bool useAlpha = false)
         {
             _context.UpdateViewport = true;
 

@@ -12,6 +12,7 @@ using OpenTK;
 using Toolbox.Core;
 using Toolbox.Core.Animations;
 using UIFramework;
+using SixLabors.ImageSharp;
 
 namespace MapStudio.UI
 {
@@ -337,9 +338,10 @@ namespace MapStudio.UI
 
             IFileFormat fileFormat = null;
 
+            fileFormat = Toolbox.Core.IO.STFileLoader.OpenFileFormat(filePath);
+
             try
             {
-                fileFormat = Toolbox.Core.IO.STFileLoader.OpenFileFormat(filePath);
             }
             catch (Exception ex)
             {
@@ -423,7 +425,7 @@ namespace MapStudio.UI
             ReloadViewportMenu();
         }
 
-        public void CreateNewProject(Type editor, Action<bool> onProjectCreated)
+        public void CreateNewProject(Type editor, string menu_name, Action<bool> onProjectCreated)
         {
             Name = "New Project";
             Resources = new ProjectResources();
@@ -459,7 +461,7 @@ namespace MapStudio.UI
 
                     UIManager.ActionExecBeforeUIDraw += delegate
                     {
-                        ActiveEditor.CreateNew();
+                        ActiveEditor.CreateNew(menu_name);
                         SetupActiveEditor(ActiveEditor);
                         ActiveEditor.AfterLoaded();
 
@@ -471,7 +473,7 @@ namespace MapStudio.UI
             {
                 ProcessLoading.Instance.IsLoading = true;
 
-                ActiveEditor.CreateNew();
+                ActiveEditor.CreateNew(menu_name);
                 SetupActiveEditor(ActiveEditor);
                 onProjectCreated?.Invoke(true);
             }
@@ -726,7 +728,7 @@ namespace MapStudio.UI
             Resources.SaveProject(Path.Combine(folderPath,"Project.json"), ViewportWindow.Pipeline._context, this);
             //Save the thumbnail in the current view
             var thumb = ViewportWindow.SaveAsScreenshot(720, 512);
-            thumb.Save(Path.Combine(folderPath,"Thumbnail.png"));
+            thumb.SaveAsPng(Path.Combine(folderPath,"Thumbnail.png"));
 
             //Update icon cache for thumbnails used
             IconManager.LoadTextureFile(Path.Combine(folderPath,"Thumbnail.png"), 64, 64, true);
