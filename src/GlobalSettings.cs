@@ -56,6 +56,7 @@ namespace MapStudio.UI
 
         public List<DockSettings> DockedWindows = new List<DockSettings>();
 
+        public string CachedFileSelectPath { get; set; } = "";
         public string CachedFolderSelectPath { get; set; } = "";
 
         private GLContext _context;

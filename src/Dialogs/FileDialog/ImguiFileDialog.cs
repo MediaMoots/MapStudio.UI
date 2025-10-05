@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -89,11 +90,12 @@ namespace MapStudio.UI
             }
             else
             {
-                var ofd = TinyFileDialog.OpenFileDialog(filters, FileName, MultiSelect);
+                var ofd = TinyFileDialog.OpenFileDialog(filters, GlobalSettings.Current.CachedFileSelectPath, MultiSelect);
                 if (!string.IsNullOrEmpty(ofd))
                 {
-
                     this.FilePaths = ofd.Split('|');
+                    GlobalSettings.Current.CachedFileSelectPath = FilePaths[0];
+                    GlobalSettings.Current.Save();
                     return true;
                 }
             }
