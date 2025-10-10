@@ -171,7 +171,7 @@ namespace MapStudio.UI
         /// </summary>
         public static void Install(string folderDir)
         {
-            string path = Path.Combine(folderDir,"latest","net5.0");
+            string path = Path.Combine(folderDir,"latest","net8.0");
             if (!Directory.Exists(path))
                 path = Path.Combine(folderDir,"latest");
 
