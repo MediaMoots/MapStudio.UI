@@ -220,7 +220,7 @@ namespace MapStudio.UI
             var vec = new Vector3(inputValue[0], inputValue[1], inputValue[2]);
 
             float size = ImGui.GetFontSize();
-            if (ImGui.DragFloat3(label, ref vec, speed))
+            if (ImGui.DragFloat3(label, ref vec, speed, 0, 0, "%.6f"))
             {
                 input.SetValue(obj, new OpenTK.Vector3(vec.X, vec.Y, vec.Z));
                 return true;
