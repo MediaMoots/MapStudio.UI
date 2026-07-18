@@ -8,6 +8,7 @@ using MapStudio.UI;
 using GLFrameworkEngine;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
+using System.Runtime.InteropServices;
 
 namespace UIFramework
 {
@@ -19,6 +20,7 @@ namespace UIFramework
         MainWindow MainWindow;
         ImGuiController _controller;
         ProcessLoading ProcessLoading = null;
+        WindowsFileDropHandler? windowsFileDropHandler;
 
         public Framework(MainWindow window, GraphicsMode gMode, string asssemblyVersion,
             string name = "TRACK_STUDIO", int width = 1600, int height = 900) : base(width, height, gMode,
@@ -71,6 +73,9 @@ namespace UIFramework
             base.OnLoad(e);
 
             Console.WriteLine($"Loading imgui controller");
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                windowsFileDropHandler = new WindowsFileDropHandler(MainWindow.OnFileDrop);
 
             _controller = new ImGuiController(Width, Height);
             MainWindow.OnApplicationLoad();
@@ -167,6 +172,7 @@ namespace UIFramework
         protected override void OnClosing(CancelEventArgs e)
         {
             MainWindow.OnClosing(e);
+            windowsFileDropHandler?.Dispose();
             base.OnClosing(e);
         }
 
